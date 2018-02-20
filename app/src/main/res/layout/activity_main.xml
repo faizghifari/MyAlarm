@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/turn_on_bg">
+
+    <TextView
+        android:id="@+id/currentTimeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/turnOnTime"
+        android:textColor="#FFFFFF"
+        android:text="Current Time" />
+
+    <DigitalClock
+        android:id="@+id/turnOnTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="65dp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        tools:ignore="SpUsage" />
+
+    <Button
+        android:id="@+id/setAlarmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/turnOnTime"
+        android:text="Set Alarm" />
+
+    <TextView
+        android:id="@+id/alarmPromptText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/setAlarmButton"
+        android:textColor="#FFFFFF"
+        android:layout_centerInParent="true" />
+
+    <Button
+        android:id="@+id/cancelAlarmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/alarmPromptText"
+        android:text="Cancel Alarm" />
+
+    <Button
+        android:id="@+id/stopAlarmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/cancelAlarmButton"
+        android:text="Stop Alarm" />
+
+</RelativeLayout>
