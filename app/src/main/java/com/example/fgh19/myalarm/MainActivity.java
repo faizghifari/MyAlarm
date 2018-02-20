@@ -18,10 +18,8 @@ import android.widget.TimePicker;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
-    TimePicker myTimePicker;
     Button buttonstartSetDialog;
     Button buttonCancelAlarm;
-    Button buttonStopAlarm;
     TextView textAlarmPrompt;
 
     TimePickerDialog timePickerDialog;
@@ -46,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                textAlarmPrompt.setText("Kepencet");
+                textAlarmPrompt.setText("Alarm set");
                 openTimePickerDialog(false);
 
             }
@@ -57,14 +55,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 cancelAlarm();
-            }
-        });
-
-        buttonStopAlarm = (Button) findViewById(R.id.stopAlarmButton);
-        buttonStopAlarm.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                stopAlarm();
             }
         });
 
@@ -114,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
         textAlarmPrompt.setText("Alarm set successfully");
 
         Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
-        intent.putExtra("Sign", 1);
         pendingIntent = PendingIntent.getBroadcast(
                 getBaseContext(), RQS_1, intent, 0);
         alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(),
@@ -126,17 +115,5 @@ public class MainActivity extends AppCompatActivity {
         if (alarmManager!= null) {
             alarmManager.cancel(pendingIntent);
         }
-    }
-
-    private void stopAlarm() {
-        Intent intent = new Intent("stopAlarm");
-        intent.putExtra("Sign", 0);
-
-        sendBroadcast(intent);
-//        Calendar calendarNow = Calendar.getInstance();
-//        pendingIntent = PendingIntent.getBroadcast(
-//                getBaseContext(), RQS_1, intent, 0);
-//        alarmManager.set(AlarmManager.RTC_WAKEUP, calendarNow.getTimeInMillis(),
-//                pendingIntent);
     }
 }

@@ -48,12 +48,4 @@
         android:layout_below="@+id/alarmPromptText"
         android:text="Cancel Alarm" />
 
-    <Button
-        android:id="@+id/stopAlarmButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_below="@+id/cancelAlarmButton"
-        android:text="Stop Alarm" />
-
 </RelativeLayout>

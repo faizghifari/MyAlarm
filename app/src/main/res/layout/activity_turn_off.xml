@@ -1,9 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/turnOffLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.fgh19.myalarm.TurnOffActivity">
+    android:background="@drawable/turn_off_bg"
+    android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+    <DigitalClock
+        android:id="@+id/digitalClock1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:layout_weight="1"
+        android:textColor="#FFFFFF"
+        android:textSize="60dp"
+        android:textStyle="bold"
+        tools:ignore="SpUsage" />
+
+    <ImageView
+        android:id="@+id/shakeImage"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_weight="6"
+        android:visibility="visible"
+        app:srcCompat="@drawable/shake_image"
+        android:contentDescription="Appear 1st when alarm activated" />
+
+    <ImageView
+        android:id="@+id/metalImage"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_weight="6"
+        android:visibility="gone"
+        app:srcCompat="@drawable/compass_image"
+        android:contentDescription="Appear 2nd after shake unlock" />
+
+    <TextView
+        android:id="@+id/guideText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="2"
+        android:text="Shake your phone 5 times to turn off the alarm"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/counterText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="2"
+        android:text="0"
+        android:textSize="40dp"
+        android:textColor="#FFFFFF"/>
+    <Button
+        android:id="@+id/stopAlarmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="50dp"
+        android:text="Stop Alarm" />
+
+</LinearLayout>
