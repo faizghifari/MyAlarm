@@ -1,9 +1,11 @@
 package com.example.fgh19.myalarm;
 
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
+import android.os.PowerManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +13,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.security.Key;
 
 public class TurnOffActivity extends AppCompatActivity {
     private TextView guideText;
@@ -31,6 +35,8 @@ public class TurnOffActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_turn_off);
+
+        turnOnScreen();
 
         guideText = (TextView) findViewById(R.id.guideText);
         counterText = (TextView) findViewById(R.id.counterText);
@@ -76,7 +82,23 @@ public class TurnOffActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    public void shakeUnlock(int count){
+    private void turnOnScreen() {
+        PowerManager.WakeLock screenlock = null;
+        KeyguardManager km = null;
+        if((getSystemService(POWER_SERVICE)) != null){
+            screenlock = ((PowerManager) getSystemService(POWER_SERVICE)).newWakeLock(
+                    PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP,
+                    "TAG");
+            km = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+            KeyguardManager.KeyguardLock keyguardLock = km.newKeyguardLock(Context.KEYGUARD_SERVICE);
+            keyguardLock.disableKeyguard();
+            screenlock.acquire(10*60*1000L);
+
+            screenlock.release();
+        }
+    }
+
+    private void shakeUnlock(int count){
         if(count > 4){
             guideText.setText("Put your phone into a guided directions");
 
@@ -87,7 +109,6 @@ public class TurnOffActivity extends AppCompatActivity {
             counterText.setText(Integer.toString(count));
         }
     }
-
 
     private void stopAlarm() {
         player.stop();
