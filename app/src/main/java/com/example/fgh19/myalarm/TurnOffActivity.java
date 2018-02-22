@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.security.Key;
+import java.text.DecimalFormat;
 
 public class TurnOffActivity extends AppCompatActivity {
     private TextView guideText;
@@ -116,21 +117,25 @@ public class TurnOffActivity extends AppCompatActivity {
 
     private void shakeUnlock(int count){
         if(count > 4){
-            guideText.setText("Point the top edge of your phone to the west (90)");
+            guideText.setText("Point the top edge of your phone to the east (90)");
 
             shakeImage.setVisibility(View.GONE);
             metalImage.setVisibility(View.VISIBLE);
 
             mSensorManager.unregisterListener(mShakeDetector);
             mSensorManager.registerListener(mCompassDetector,mAccelerometer,SensorManager.SENSOR_DELAY_UI);
+            mSensorManager.registerListener(mCompassDetector,mMagnetic,SensorManager.SENSOR_DELAY_UI);
 
         } else counterText.setText(Integer.toString(count));
     }
 
     private void compassUnlock(Double azimut) {
-        if((azimut >= 90) || (azimut <= 91)){
+        if((azimut >= 90) && (azimut <= 91)){
             stopAlarm();
-        } else counterText.setText(Double.toString(azimut));
+        } else {
+            DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+            counterText.setText(decimalFormat.format(azimut));
+        }
     }
 
     private void stopAlarm() {

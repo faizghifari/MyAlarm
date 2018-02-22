@@ -29,7 +29,6 @@ public class CompassDetector implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (mListener != null){
-            Log.i("sign","masukCompassDetector");
             if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
                 mGravity = event.values;
             if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
@@ -38,11 +37,13 @@ public class CompassDetector implements SensorEventListener {
                 float R[] = new float[9];
                 float I[] = new float[9];
                 boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
+                Log.i("sign",Boolean.toString(success));
                 if (success) {
+                    Log.i("sign","masuk semua");
                     float orientation[] = new float[3];
                     SensorManager.getOrientation(R, orientation);
                     azimut = orientation[0]*180/3.14;
-
+                    Log.i("sign",Double.toString(azimut));
                     mListener.onDirections(azimut);
                 }
             }
