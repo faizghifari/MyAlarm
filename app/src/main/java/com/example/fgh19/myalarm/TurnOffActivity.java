@@ -25,11 +25,13 @@ public class TurnOffActivity extends AppCompatActivity {
 
     private MediaPlayer player;
 
-    private Button buttonStopAlarm;
+//    private Button buttonStopAlarm;
 
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
+    private Sensor mMagnetic;
     private ShakeDetector mShakeDetector;
+    private CompassDetector mCompassDetector;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -44,13 +46,13 @@ public class TurnOffActivity extends AppCompatActivity {
         shakeImage = (ImageView) findViewById(R.id.shakeImage);
         metalImage = (ImageView) findViewById(R.id.metalImage);
 
-        buttonStopAlarm = (Button) findViewById(R.id.stopAlarmButton);
-        buttonStopAlarm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                stopAlarm();
-            }
-        });
+//        buttonStopAlarm = (Button) findViewById(R.id.stopAlarmButton);
+//        buttonStopAlarm.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                stopAlarm();
+//            }
+//        });
 
         Toast.makeText(getBaseContext(), "Alarm aktif!", Toast.LENGTH_LONG).show();
         player = MediaPlayer.create(getBaseContext(),R.raw.alarm);
@@ -58,8 +60,10 @@ public class TurnOffActivity extends AppCompatActivity {
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensorManager.registerListener(mShakeDetector,mAccelerometer,SensorManager.SENSOR_DELAY_UI);
+        mSensorManager.registerListener(mCompassDetector,mMagnetic,SensorManager.SENSOR_DELAY_UI);
 
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mMagnetic = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         mShakeDetector = new ShakeDetector();
         mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
@@ -68,17 +72,39 @@ public class TurnOffActivity extends AppCompatActivity {
                 shakeUnlock(count);
             }
         });
+
+        mCompassDetector = new CompassDetector();
+        mCompassDetector.setOnCompassListener(new CompassDetector.OnCompassListener() {
+            @Override
+            public void onDirections(Double azimut) {
+                compassUnlock(azimut);
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mSensorManager.registerListener(mShakeDetector,mAccelerometer,SensorManager.SENSOR_DELAY_UI);
+
+        int visibility = shakeImage.getVisibility();
+        if (visibility == 0) {
+            mSensorManager.registerListener(mShakeDetector,mAccelerometer,SensorManager.SENSOR_DELAY_UI);
+        } else {
+            mSensorManager.registerListener(mCompassDetector,mAccelerometer,SensorManager.SENSOR_DELAY_UI);
+            mSensorManager.registerListener(mCompassDetector,mMagnetic,SensorManager.SENSOR_DELAY_UI);
+        }
+
     }
 
     @Override
     public void onPause() {
-        mSensorManager.unregisterListener(mShakeDetector);
+
+        int visibility = shakeImage.getVisibility();
+        if (visibility == 0) {
+            mSensorManager.unregisterListener(mShakeDetector);
+        } else {
+            mSensorManager.unregisterListener(mCompassDetector);
+        }
         super.onPause();
     }
 
@@ -100,14 +126,22 @@ public class TurnOffActivity extends AppCompatActivity {
 
     private void shakeUnlock(int count){
         if(count > 4){
-            guideText.setText("Put your phone into a guided directions");
+            guideText.setText("Point the top edge of your phone to the west (90)");
 
             shakeImage.setVisibility(View.GONE);
             metalImage.setVisibility(View.VISIBLE);
             counterText.setVisibility(View.GONE);
-        } else {
-            counterText.setText(Integer.toString(count));
-        }
+
+            mSensorManager.unregisterListener(mShakeDetector);
+            mSensorManager.registerListener(mCompassDetector,mAccelerometer,SensorManager.SENSOR_DELAY_UI);
+
+        } else counterText.setText(Integer.toString(count));
+    }
+
+    private void compassUnlock(Double azimut) {
+        if((azimut >= 90) || (azimut <= 91)){
+            stopAlarm();
+        } else counterText.setText(Double.toString(azimut));
     }
 
     private void stopAlarm() {
