@@ -18,13 +18,21 @@ import java.security.Key;
 import java.text.DecimalFormat;
 
 public class TurnOffActivity extends AppCompatActivity {
+    static final String STATE_PLAYER = "playerState";
+    static final String STATE_COUNTER_TEXT = "counterTextState";
+    static final String STATE_GUIDE_TEXT = "guideTextState";
+    static final String STATE_METAL_IMAGE = "metalImageState";
+    static final String STATE_SHAKE_IMAGE = "shakeImageState";
+
     private TextView guideText;
     private TextView counterText;
 
     private ImageView shakeImage;
     private ImageView metalImage;
+    private boolean imageStatus;
 
     private MediaPlayer player;
+    private boolean playerStatus;
 
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
@@ -45,9 +53,25 @@ public class TurnOffActivity extends AppCompatActivity {
         shakeImage = (ImageView) findViewById(R.id.shakeImage);
         metalImage = (ImageView) findViewById(R.id.metalImage);
 
-        Toast.makeText(getBaseContext(), "Alarm aktif!", Toast.LENGTH_LONG).show();
-        player = MediaPlayer.create(getBaseContext(),R.raw.alarm);
-        player.start();
+        if(savedInstanceState != null) {
+            playerStatus = false;
+            imageStatus = false;
+
+            guideText.setText(savedInstanceState.getString(STATE_GUIDE_TEXT));
+            counterText.setText(savedInstanceState.getString(STATE_COUNTER_TEXT));
+
+            shakeImage.setVisibility(savedInstanceState.getInt(STATE_SHAKE_IMAGE));
+            metalImage.setVisibility(savedInstanceState.getInt(STATE_METAL_IMAGE));
+        } else {
+            playerStatus = true;
+            imageStatus = true;
+        }
+
+        if (playerStatus) {
+            Toast.makeText(getBaseContext(), "Alarm aktif!", Toast.LENGTH_LONG).show();
+            player = MediaPlayer.create(getBaseContext(),R.raw.alarm);
+            player.start();
+        }
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensorManager.registerListener(mShakeDetector,mAccelerometer,SensorManager.SENSOR_DELAY_UI);
@@ -71,6 +95,22 @@ public class TurnOffActivity extends AppCompatActivity {
                 compassUnlock(azimut);
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        // save media player status
+        savedInstanceState.putBoolean(STATE_PLAYER,playerStatus);
+
+        // save text status
+        savedInstanceState.putString(STATE_COUNTER_TEXT,counterText.getText().toString());
+        savedInstanceState.putString(STATE_GUIDE_TEXT,guideText.getText().toString());
+
+        // save image status
+        savedInstanceState.putInt(STATE_SHAKE_IMAGE,shakeImage.getVisibility());
+        savedInstanceState.putInt(STATE_METAL_IMAGE,metalImage.getVisibility());
+
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
