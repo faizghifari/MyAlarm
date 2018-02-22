@@ -25,8 +25,6 @@ public class TurnOffActivity extends AppCompatActivity {
 
     private MediaPlayer player;
 
-//    private Button buttonStopAlarm;
-
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
     private Sensor mMagnetic;
@@ -45,14 +43,6 @@ public class TurnOffActivity extends AppCompatActivity {
 
         shakeImage = (ImageView) findViewById(R.id.shakeImage);
         metalImage = (ImageView) findViewById(R.id.metalImage);
-
-//        buttonStopAlarm = (Button) findViewById(R.id.stopAlarmButton);
-//        buttonStopAlarm.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                stopAlarm();
-//            }
-//        });
 
         Toast.makeText(getBaseContext(), "Alarm aktif!", Toast.LENGTH_LONG).show();
         player = MediaPlayer.create(getBaseContext(),R.raw.alarm);
@@ -130,7 +120,6 @@ public class TurnOffActivity extends AppCompatActivity {
 
             shakeImage.setVisibility(View.GONE);
             metalImage.setVisibility(View.VISIBLE);
-            counterText.setVisibility(View.GONE);
 
             mSensorManager.unregisterListener(mShakeDetector);
             mSensorManager.registerListener(mCompassDetector,mAccelerometer,SensorManager.SENSOR_DELAY_UI);

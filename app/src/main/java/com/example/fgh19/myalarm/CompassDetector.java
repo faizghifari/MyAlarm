@@ -4,6 +4,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 /**
  * Created by fgh19 on 2/22/2018.
@@ -28,6 +29,7 @@ public class CompassDetector implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (mListener != null){
+            Log.i("sign","masukCompassDetector");
             if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
                 mGravity = event.values;
             if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
