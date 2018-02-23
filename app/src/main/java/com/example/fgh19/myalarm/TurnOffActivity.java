@@ -2,6 +2,7 @@ package com.example.fgh19.myalarm;
 
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
@@ -180,6 +181,10 @@ public class TurnOffActivity extends AppCompatActivity {
 
     private void stopAlarm() {
         player.stop();
+        Intent intent = new Intent(getApplicationContext(),TurnedOffActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
         finish();
     }
+
 }
